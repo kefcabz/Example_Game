@@ -17,6 +17,8 @@ public class TankShooting : MonoBehaviour
             Shoot();
             nextFireTime = Time.time + 1f / fireRate;
         }
+
+        //Destroy Object on Collision 
     }
 
     void Shoot()
