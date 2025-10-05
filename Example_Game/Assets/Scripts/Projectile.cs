@@ -17,7 +17,8 @@ public class Projectile : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+
         // Destroy missile when it hits anything
-        Destroy(gameObject);
+            Destroy(gameObject);
     }
 }
