@@ -5,8 +5,8 @@ public class StationaryEnemy : MonoBehaviour
     public GameObject missilePrefab;  
     public Transform barrelTip;      
     public float fireRate = 1f;       
-    public float missileSpeed = 20f;
-    public float detectionRange = 50f; 
+    public float missileSpeed = 10f;
+    public float detectionRange = 40f; 
 
     private float nextFireTime = 0f;
     private Transform player;
@@ -21,7 +21,7 @@ public class StationaryEnemy : MonoBehaviour
         if (player == null) return;
 
         Vector3 direction = player.position - transform.position;
-        direction.y = 0; // Keep rotation horizontal
+        direction.y = 0;
         float distance = direction.magnitude;
 
         // Only try to see player if within detection range
