@@ -5,21 +5,27 @@ public class MoveableEnemy : MonoBehaviour
 {
     public float targetUpdateRate = 1.5f; 
     private float nextTargetTime = 0f;    
+    public float moveSpeed = 2f; 
     
-    public float moveSpeed = 2f;
-    public float turnSpeed = 500f;
-
     private Transform playerTarget;
     private NavMeshAgent navMeshAgent;
+    private Rigidbody rb; 
 
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-        // Match the NavMeshAgent speed to custom moveSpeed
+        rb = GetComponent<Rigidbody>(); 
+
+        // SET THE SPEED
         navMeshAgent.speed = moveSpeed; 
-        
-        navMeshAgent.updateRotation = false;
+        navMeshAgent.updateRotation = true;
         navMeshAgent.updatePosition = false;
+
+        if (rb != null)
+        {
+            rb.isKinematic = false; 
+            rb.freezeRotation = true; 
+        }
     }
 
     void Start()
@@ -32,26 +38,29 @@ public class MoveableEnemy : MonoBehaviour
     {
         if (playerTarget != null)
         {
-            // Check the timer before updating target
             if (Time.time >= nextTargetTime)
             {
-                // Only set destination once every 1.5 seconds
                 navMeshAgent.SetDestination(playerTarget.position);
                 nextTargetTime = Time.time + targetUpdateRate; 
             }
+        }
+    }
 
-            if (navMeshAgent.hasPath)
+    void FixedUpdate()
+    {
+        if (rb != null && navMeshAgent.enabled && navMeshAgent.hasPath)
+        {
+            Vector3 worldDelta = navMeshAgent.desiredVelocity;
+            rb.linearVelocity = worldDelta;
+
+            if (worldDelta.sqrMagnitude > 0.01f)
             {
-                // Calculate the direction the enemy needs to turn to follow the path
-                Vector3 direction = (navMeshAgent.steeringTarget - transform.position).normalized;
-
-                // Rotate like a tank
-                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
-
-                // Move forward
-                transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+                Quaternion lookRotation = Quaternion.LookRotation(worldDelta);
+                rb.rotation = Quaternion.Slerp(rb.rotation, lookRotation, navMeshAgent.angularSpeed * Time.fixedDeltaTime / Quaternion.Angle(rb.rotation, lookRotation));
             }
+
+
+            navMeshAgent.nextPosition = rb.position;
         }
     }
 }
