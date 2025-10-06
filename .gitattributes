@@ -1,0 +1,17 @@
+Tell GitHub to ignore Unity asset and metadata files when calculating language percentage.
+This ensures your project is correctly identified as C# (C-Sharp).
+Ignore all .meta files (Unity's YAML metadata)
+*.meta linguist-generated=true
+
+Ignore .unity (scene) files
+*.unity linguist-generated=true
+
+Ignore .asset and .prefab files
+*.asset linguist-generated=true
+*.prefab linguist-generated=true
+
+Ignore .controller files (Animator/Mecanim data)
+*.controller linguist-generated=true
+
+Explicitly mark C# as the language for .cs files (usually redundant but safe)
+*.cs linguist-language=C#
