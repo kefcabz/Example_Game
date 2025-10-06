@@ -3,20 +3,23 @@ using UnityEngine.AI;
 
 public class MoveableEnemy : MonoBehaviour
 {
-    public float maxHealth = 50f;
+    public float targetUpdateRate = 1.5f; 
+    private float nextTargetTime = 0f;    
+    
     public float moveSpeed = 2f;
-    public float turnSpeed = 500f; 
+    public float turnSpeed = 500f;
 
-    private float currentHealth;
     private Transform playerTarget;
     private NavMeshAgent navMeshAgent;
 
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.updateRotation = false; 
-        navMeshAgent.updatePosition = false; 
-        currentHealth = maxHealth;
+        // Match the NavMeshAgent speed to custom moveSpeed
+        navMeshAgent.speed = moveSpeed; 
+        
+        navMeshAgent.updateRotation = false;
+        navMeshAgent.updatePosition = false;
     }
 
     void Start()
@@ -29,34 +32,26 @@ public class MoveableEnemy : MonoBehaviour
     {
         if (playerTarget != null)
         {
-           
-            navMeshAgent.SetDestination(playerTarget.position);
+            // Check the timer before updating target
+            if (Time.time >= nextTargetTime)
+            {
+                // Only set destination once every 1.5 seconds
+                navMeshAgent.SetDestination(playerTarget.position);
+                nextTargetTime = Time.time + targetUpdateRate; 
+            }
 
             if (navMeshAgent.hasPath)
             {
+                // Calculate the direction the enemy needs to turn to follow the path
                 Vector3 direction = (navMeshAgent.steeringTarget - transform.position).normalized;
 
-                // Rotate like a tank 
+                // Rotate like a tank
                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
 
                 // Move forward
-                transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+                transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
             }
         }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        Debug.Log("Enemy tank took " + damage + " damage. Health: " + currentHealth);
-
-        if (currentHealth <= 0) Die();
-    }
-
-    private void Die()
-    {
-        Debug.Log("Tank Destroyed!!.");
-        Destroy(gameObject);
     }
 }
