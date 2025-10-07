@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8112430401805160761}
   - component: {fileID: 7196981918046621177}
   - component: {fileID: 8117963986914346463}
+  - component: {fileID: 1728223801593789963}
   m_Layer: 0
   m_Name: "\u0421TF_Missile_Yel"
   m_TagString: Projectile
@@ -152,4 +153,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2324adab8923b4539e94eae4bfe3115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
-  lifetime: 4
+  lifetime: 3
+--- !u!65 &1728223801593789963
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9094009511398482965}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.066178165, y: 0.0661782, z: 0.27574235}
+  m_Center: {x: 0, y: -0.000000016763806, z: 0.13787118}
