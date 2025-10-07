@@ -11,7 +11,7 @@ public class TankHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDestroyed) return; // Stop if the tank is already dead
+        if (isDestroyed) return; // Stop if tank is already dead
 
         currentHealth -= damage;
         Debug.Log(gameObject.name + " took " + damage + " damage! Remaining Health: " + currentHealth);
@@ -35,8 +35,8 @@ public class TankHealth : MonoBehaviour
             if (gameObject.CompareTag("Enemy"))
             {
                 GameManager.Instance.EnemyDied();
-            } 
-            // If it's not tagged "Enemy", we assume it's the Player.
+            }
+            // If it's not tagged "Enemy", assume it's the Player.
             else if (gameObject.CompareTag("Player"))
             {
                 GameManager.Instance.PlayerDied();
